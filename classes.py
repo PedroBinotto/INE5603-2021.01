@@ -3,13 +3,11 @@
 
     Author: Pedro Santi Binotto (20200634)
     Date created: 17/05/2021
-    Date last modified: 19/05/2021 
+    Date last modified: 20/05/2021 
     Python Version: 3.7.3
 '''
 
 from typing import Iterable
-
-from utils import cria_matriz
 
 
 class CampoMinado:
@@ -18,14 +16,15 @@ class CampoMinado:
         self.__height = len(self.__matriz_base)
         self.__width = len(self.__matriz_base[0])
         self.__campo = self.__matriz_base.copy()
-        self.__mapa_descoberta = cria_matriz(                                   # Matriz utilizada para mapear posições
+        self.__mapa_descoberta = self.__cria_matriz(                            # Matriz utilizada para mapear posições
             self.__height,                                                      #    já descobertas.
             self.__width,                                                       #    Elementos inicializados para 0s.
             0
         )
         self.__col = 3                                                          # Valor que será utilizado para formatar
-                                                                                #    a impressão das matrizes.
-    def conta(self, m: Iterable[int], pos: Iterable[int]):
+        self.__computa_matriz()                                                 #    a impressão das matrizes.
+
+    def __conta(self, m: Iterable[int], pos: Iterable[int]):
         height = self.__height
         width = self.__width
         cnt = 0
@@ -37,14 +36,22 @@ class CampoMinado:
                     if m[pos[0] + i][pos[1] + j] == -1:
                         cnt += 1
         return cnt
+    
+    def __cria_matriz(self, h, w, val):
+        m = []
+        for i in range(h):
+            m.append([val] * w)
+        return m
 
-    def computa_matriz(self):
-        height = self.__height
+    def __computa_matriz(self):                                                 # Cria matriz do jogo à partir da
+        height = self.__height                                                  #     matriz base.
         width = self.__width
         for i in range(height):
             for j in range(width):
                 if self.__matriz_base[i][j] == 0:
-                    self.__campo[i][j] = self.conta(self.__matriz_base, (i, j))
+                    self.__campo[i][j] = self.__conta(
+                        self.__matriz_base, (i, j)
+                    )
 
     def marca_pos(self, x: int, y: int):                                        # Marca posições descobertas na matriz
         height = self.__height                                                  #   'mapa_descoberta'.
@@ -61,11 +68,14 @@ class CampoMinado:
                             self.marca_pos(x + i, y + j)
                         elif self.__campo[x + i][y + j] != -1:
                             self.__mapa_descoberta[x + i][y + j] = 1
+        elif self.__campo[x][y] != -1:
+            self.__mapa_descoberta[x][y] = 1
         else:
-            print('voce perdeu')
-    
-    def esconde(self, i, j):
-        if self.__mapa_descoberta[i][j] == 1:
+            self.__mapa_descoberta[x][y] = 1
+            return False
+   
+    def __esconde(self, i, j):                                                  # Determina se dado elemento deve ou não
+        if self.__mapa_descoberta[i][j] == 1:                                   #    ser exibido.
             return str(self.__campo[i][j])
         else:
             return '-'
@@ -77,6 +87,6 @@ class CampoMinado:
         res = ""
         for i in range(height):
             for j in range(width):
-                res += "".join(self.esconde(i, j).rjust(col))                   # Justifica cada elemento em forma de
+                res += "".join(self.__esconde(i, j).rjust(col))                 # Justifica cada elemento em forma de
             res += '\n'                                                         #    string para imprimir.
         return res

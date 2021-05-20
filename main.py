@@ -3,7 +3,7 @@
 
     Author: Pedro Santi Binotto (20200634)
     Date created: 17/05/2021
-    Date last modified: 19/05/2021 
+    Date last modified: 20/05/2021 
     Python Version: 3.7.3
 '''
 
@@ -15,23 +15,24 @@ def main():
         [ 0,  -1,  0,  0, -1,  0,  0],
         [ 0,  -1,  0,  0, -1,  0,  0],
         [ 0,   0,  0,  0,  0,  0,  0],
-        [ 1,   0,  0, -1,  0,  0, -1],
+        [ 0,   0,  0, -1,  0,  0, -1],
         [ 0,   0,  0,  0,  0,  0, -1],
         [ 0,  -1,  0,  0,  0,  0, -1],
         [ 0,  -1,  0,  0,  0,  0,  0],
         [ 0,  -1,  0,  0,  0,  0,  0],
-        [ 0,   0,  0,  0,  0,  0,  0],
-        [ 1,  -1,  0, -1, -1,  0,  0]
-    ]
-
-    teste = [
-        [1, 2, 3],
-        [4, 0, 5],
-        [6, 7, 8]
+        [ 0,  -1,  0,  0,  0,  0,  0],
+        [ 0,   0,  0, -1, -1,  0,  0]
     ]
 
     campo = CampoMinado(matriz)
-    campo.computa_matriz()
+
+    print(campo.marca_pos(7, 3))
+    print(campo.__str__())
+
+    print(campo.marca_pos(9, 0))
+    print(campo.__str__())
+
+    print(campo.marca_pos(8, 1))
     print(campo.__str__())
 
 main()

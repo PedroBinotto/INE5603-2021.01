@@ -7,20 +7,19 @@
     Python Version: 3.7.3
 '''
 
+import copy
+import random
 from typing import Iterable
 
 
 class CampoMinado:
-    def __init__(self, matriz: Iterable[int]):
-        self.__matriz_base = matriz
-        self.__height = len(self.__matriz_base)
-        self.__width = len(self.__matriz_base[0])
-        self.__campo = self.__matriz_base.copy()
-        self.__mapa_descoberta = self.__cria_matriz(                            # Matriz utilizada para mapear posições
-            self.__height,                                                      #    já descobertas.
-            self.__width,                                                       #    Elementos inicializados para 0s.
-            0
-        )
+    def __init__(self, height, width, matriz: Iterable[int]=None):
+        self.__height = height
+        self.__width = width
+        self.__matriz_base = matriz if matriz is not None\
+            else self.__gerar_matriz()
+        self.__campo = copy.deepcopy(self.__matriz_base)                        # Neste caso cópias 'shallow' não bastam
+        self.__mapa_descoberta = self.__gerar_matriz(vazia=True)                # Matriz utilizada para mapear posições
         self.__col = 3                                                          # Valor que será utilizado para formatar
         self.__total_livre = 0                                                  #    a impressão das matrizes.
         self.__computa_matriz()
@@ -37,28 +36,38 @@ class CampoMinado:
                     if m[pos[0] + i][pos[1] + j] == -1:
                         cnt += 1
         return cnt
-    
-    def __cria_matriz(self, h, w, val):
+   
+    def __gerar_matriz(self, vazia: bool=False):
         m = []
-        for i in range(h):
-            m.append([val] * w)
+        height = self.__height
+        width = self.__width
+        for i in range(height):
+            if vazia:
+                m.append([0] * width)
+            else:
+                m.append(random.choices([0, -1], weights = [5, 1], k=width))
         return m
 
     def __computa_matriz(self):                                                 # Cria matriz do jogo à partir da
         height = self.__height                                                  #     matriz base.
         width = self.__width
+        if height != len(self.__matriz_base)\
+            or width != len(self.__matriz_base[0]):
+            print('Dimensões incompatíveis com a matriz inserida!')
+            quit()
         for i in range(height):
             for j in range(width):
                 if self.__matriz_base[i][j] == 0:
-                    self.__campo[i][j] = self.__conta(
-                        self.__matriz_base, (i, j)
-                    )
+                    self.__campo[i][j] = self.__conta(self.__matriz_base, (i, j))
                     self.__total_livre += 1
 
     def marca_pos(self, x: int, y: int):                                        # Marca posições descobertas na matriz
         height = self.__height                                                  #   'mapa_descoberta'.
         width = self.__width
-        if self.__campo[x][y] == 0:
+        if (x > height or x < 0) or\
+            (y > width or x < 0):
+            print('Posição inválida!')
+        elif self.__campo[x][y] == 0:
             self.__mapa_descoberta[x][y] = 1
             for i in [-1, 0, 1]:
                 for j in [-1, 0, 1]:

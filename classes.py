@@ -22,7 +22,8 @@ class CampoMinado:
             0
         )
         self.__col = 3                                                          # Valor que será utilizado para formatar
-        self.__computa_matriz()                                                 #    a impressão das matrizes.
+        self.__total_livre = 0                                                  #    a impressão das matrizes.
+        self.__computa_matriz()
 
     def __conta(self, m: Iterable[int], pos: Iterable[int]):
         height = self.__height
@@ -52,6 +53,7 @@ class CampoMinado:
                     self.__campo[i][j] = self.__conta(
                         self.__matriz_base, (i, j)
                     )
+                    self.__total_livre += 1
 
     def marca_pos(self, x: int, y: int):                                        # Marca posições descobertas na matriz
         height = self.__height                                                  #   'mapa_descoberta'.
@@ -68,17 +70,38 @@ class CampoMinado:
                             self.marca_pos(x + i, y + j)
                         elif self.__campo[x + i][y + j] != -1:
                             self.__mapa_descoberta[x + i][y + j] = 1
+            self.__estado_jogo()
         elif self.__campo[x][y] != -1:
             self.__mapa_descoberta[x][y] = 1
-        else:
+            self.__estado_jogo()
+        else:                                                                   # Caso o elemento selecionado seja -1.
             self.__mapa_descoberta[x][y] = 1
-            return False
+            self.__perdeu()
    
     def __esconde(self, i, j):                                                  # Determina se dado elemento deve ou não
         if self.__mapa_descoberta[i][j] == 1:                                   #    ser exibido.
             return str(self.__campo[i][j])
         else:
             return '-'
+    
+    def __estado_jogo(self):
+        total = 0
+        for i in range(self.__height):
+            for j in range(self.__width):
+                if self.__mapa_descoberta[i][j] == 1:
+                    total += 1
+        if total == self.__total_livre:
+            self.__venceu()
+
+    def __venceu(self):
+        print(self.__str__())
+        print('\nVocê venceu!\n')
+        quit()
+
+    def __perdeu(self):
+        print(self.__str__())
+        print('\nVocê perdeu!\n')
+        quit()
 
     def __str__(self):
         col = self.__col

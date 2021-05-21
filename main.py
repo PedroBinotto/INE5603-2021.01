@@ -11,35 +11,32 @@ from classes import CampoMinado
 
 
 def main():
-    # matriz = [
-    #     [ 0,  -1,  0,  0, -1,  0,  0],
-    #     [ 0,  -1,  0,  0, -1,  0,  0],
-    #     [ 0,   0,  0,  0,  0,  0,  0],
-    #     [ 0,   0,  0, -1,  0,  0, -1],
-    #     [ 0,   0,  0,  0,  0,  0, -1],
-    #     [ 0,  -1,  0,  0,  0,  0, -1],
-    #     [ 0,  -1,  0,  0,  0,  0,  0],
-    #     [ 0,  -1,  0,  0,  0,  0,  0],
-    #     [ 0,  -1,  0,  0,  0,  0,  0],
-    #     [ 0,   0,  0, -1, -1,  0,  0]
-    # ]
-
-    print('')
-    linhas = int(input('Insira o número de linhas para o campo: '))
-    colunas = int(input('Insira o número de colunas para o campo: '))
-
-    matriz = []
-    for i in range(linhas):
+    matriz = [
+        [ 0,  -1,  0,  0, -1,  0,  0],
+        [ 0,  -1,  0,  0, -1,  0,  0],
+        [ 0,   0,  0,  0,  0,  0,  0],
+        [ 0,   0,  0, -1,  0,  0, -1],
+        [ 0,   0,  0,  0,  0,  0, -1],
+        [ 0,  -1,  0,  0,  0,  0, -1],
+        [ 0,  -1,  0,  0,  0,  0,  0],
+        [ 0,  -1,  0,  0,  0,  0,  0],
+        [ 0,  -1,  0,  0,  0,  0,  0],
+        [ 0,   0,  0, -1, -1,  0,  0]
+    ]
 
     campo = CampoMinado(matriz)
 
-    print(campo.marca_pos(7, 3))
+    campo.marca_pos(7, 3)
     print(campo.__str__())
 
-    print(campo.marca_pos(9, 0))
+    campo.marca_pos(9, 0)
     print(campo.__str__())
 
-    print(campo.marca_pos(8, 1))
+    campo.marca_pos(3, 1)
     print(campo.__str__())
+
+    campo.marca_pos(8, 1)
+    print(campo.__str__())
+
 
 main()
